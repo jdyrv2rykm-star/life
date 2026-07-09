@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>平凡人生模拟器</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5efe2;color:#1c1b18;padding-bottom:128px}main{min-height:100vh;display:grid;grid-template-rows:auto 1fr}.side{background:#171717;color:#f9f4e8;padding:18px 28px 16px;display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:22px;align-items:center;border-bottom:4px solid #1d1b16}.brand h1{font-size:34px;line-height:1.03;margin:0 0 8px}.brand p{color:#cfc7b5;line-height:1.55;margin:0}.meter{position:fixed;left:18px;right:18px;bottom:14px;z-index:5;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:#171717;color:#f9f4e8;border:2px solid #1d1b16;box-shadow:0 8px 0 #000;border-radius:8px;padding:12px}.bar{display:grid;gap:5px}.bar span{display:flex;justify-content:space-between;color:#e7dfd0;font-size:13px}.track{height:9px;background:#30302c;border-radius:99px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#58b388,#e9b949,#dc5f49)}.note{grid-column:1/-1;color:#bfb7a7;font-size:13px;line-height:1.5}.stage{padding:32px 34px 44px;display:grid;align-content:center}.panel{max-width:1040px;margin:auto;width:100%}.age{color:#7b5630;font-weight:800;margin-bottom:12px;letter-spacing:.02em}.card{background:#fffaf0;border:3px solid #1d1b16;box-shadow:8px 8px 0 #1d1b16;border-radius:8px;padding:30px}.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.top h2{font-size:36px;margin:0 0 12px}.context{line-height:1.75;color:#4a443a;margin:0;white-space:pre-line;font-size:16px}.rumor{margin:18px 0 0;padding:16px;border-radius:8px;background:#f7d66d;border:2px dashed #1d1b16}.rumor strong{display:block;margin-bottom:6px}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}button{font:inherit;cursor:pointer}.choice{min-height:190px;text-align:left;background:#fefefd;border:2px solid #1d1b16;border-radius:8px;padding:17px;display:flex;flex-direction:column;gap:10px;transition:.18s}.choice:nth-child(1){background:#fff7d7}.choice:nth-child(2){background:#eaf5ee}.choice:nth-child(3){background:#eaf0ff}.choice:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 #1d1b16}.choice b{font-size:19px}.choice small{color:#514b42;line-height:1.55}.tag{margin-top:auto;color:#8d3d2c;font-weight:800}.result{margin-top:18px;background:#e5f1ee;border:2px solid #1d1b16;border-radius:8px;padding:16px;line-height:1.65}.next,.restart{margin-top:18px;background:#1d1b16;color:#fffaf0;border:0;border-radius:7px;padding:13px 18px;font-weight:800}.timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(54px,1fr));gap:8px}.dot{min-height:50px;border-radius:8px;background:#fffaf0;color:#1d1b16;border:2px solid #3b3830;display:grid;place-items:center;font-weight:900;box-shadow:3px 3px 0 #000}.dot.on{background:#58b388;color:#fff}.dot::after{content:attr(data-step)}.ending h2{font-size:38px;margin:0 0 12px}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:18px 0}.stat{border:1px solid #d3cab8;border-radius:8px;padding:12px;background:#fff}.stat b{display:block;font-size:22px}.quote{font-size:22px;line-height:1.45;margin:20px 0;color:#8d3d2c}.report{background:#171717;color:#f9f4e8;border-radius:8px;padding:22px;margin-top:18px}.report p{color:#d8d0bd}.hidden{display:none}@media(max-width:860px){body{padding-bottom:210px}.side{grid-template-columns:1fr}.timeline{grid-template-columns:repeat(4,1fr)}.meter{grid-template-columns:1fr 1fr}.choices,.stats{grid-template-columns:1fr}.stage{padding:20px}.top{display:block}.brand h1{font-size:30px}}
+</style>
+</head>
+<body>
+<main>
+<aside class="side">
+<div class="brand"><h1>平凡人生<br>模拟器</h1><p>目标不是逆袭，也不是传奇。请尽可能平凡、顺利、完整地过完这一辈子。</p></div>
+<div class="timeline" id="line"></div><div class="meter" id="meters"></div>
+<div class="note">幸福值已隐藏。数值只是路边的记分牌，真正要走的是这一格又一格的人生棋盘。</div>
+</aside>
+<section class="stage"><div class="panel" id="app"></div></section>
+</main>
+<script>
+const nodes=[
+["22岁","毕业选择","机缘巧合之下，你同时遇到了三个看起来很好的机会。每个机会都有人说值得把青春押上去。",["冲互联网秋招","头部厂、行业独角兽、中小厂和春招补录都在同一个投递列表里。",["焦虑",80,"社会",90,"内耗",35,"幸福",-10],"你学会了在凌晨两点回复“收到”。工资是真的，头发也是真的少。","bigtech"],["借家里资源进央国企","家里有认识的人愿意帮忙问问，长辈说稳定平台会让人生少走弯路。",["后悔",55,"社会",65,"内耗",25,"幸福",8],"你获得了一个听起来体面的工牌，以及一种很难解释的星期一。","stable"],["参加选调考试","老师和同学都说基层经历很锻炼人，几年之后可能会有更大的空间。",["焦虑",45,"后悔",45,"社会",55,"幸福",4],"你开始理解表格、会议和“再研究一下”的真实含义。","public"]],
+["25岁","时代风口","AI、新消费、自媒体正在爆发。你在几次饭局和行业活动里听到了很多正在发生的故事。",["跟行业前辈出来做事","你结识了一位行业内的领军人物，对方分享了经验、资源和一个看起来正在打开的窗口。",["焦虑",110,"后悔",70,"社会",80,"幸福",-25],"你把人生押成了 BP。路演时最稳定的是咖啡摄入量。","startup"],["转行转型做尝试","你开始接触新的技能、岗位和圈子，想给自己多开一条路。",["焦虑",70,"内耗",55,"社会",45,"幸福",2],"你收藏了 48 门课，真正学完了 1.5 门。也算参与过时代。","skill"],["深耕主业走垂直路线","你决定把原本的职能做深，在一个方向上持续积累作品、经验和行业信用。",["后悔",60,"内耗",40,"社会",20,"幸福",10],"你错过了三个热词，也保住了周末半天。","slow"]],
+["28岁","买房焦虑","你接到“小道消息”：某地要建设经济圈，政策扶持、产业导入、交通规划都在路上。朋友圈说：这次不是炒房，是时代红利。",["高杠杆买政策核心区房产","听说核心区会承接产业和人口，错过就只能看别人上车。",["焦虑",130,"后悔",65,"社会",95,"幸福",-35],"你拥有了房子的一部分，银行拥有了你的未来一部分。","house"],["牺牲通勤买远郊舒适房","同样的钱，核心区只能买焦虑，远一点可以买阳光、客厅和独立书房。",["焦虑",90,"后悔",85,"社会",55,"幸福",-18],"你买下了更大的房子，也买下了更长的路。","commute"],["继续租房","把钱留给自己。",["后悔",75,"内耗",65,"社会",-10,"幸福",18],"你拥有了自由，也拥有了每年搬家时对人生的重新质疑。","rent"]],
+["35岁","婚姻困境","亲密关系开始和户口、房贷、生育、父母期待、阶层想象绑定。你发现婚姻不是爱情的下一关，而是现实系统的联机模式。",["积极寻求合适的结婚对象","你认真相亲、见朋友介绍的人，也愿意花时间了解一个适合一起生活的人。",["焦虑",65,"后悔",45,"内耗",55,"社会",30,"幸福",20],"你们把浪漫过成了项目管理，偶尔也能从预算表里捡到一点温柔。","marry_seek"],["不结婚保持自由","你暂时不进入婚姻，把时间、钱和生活节奏留给自己。",["焦虑",50,"后悔",75,"内耗",65,"社会",-25,"幸福",15],"你保住了自由，也获得了亲戚饭桌上的长期观察席。","single"],["合适就结，不合适就随缘","你不强求，也不拒绝，把关系交给日常相处和时间筛选。",["焦虑",45,"后悔",55,"内耗",50,"社会",10,"幸福",15],"你把婚姻从倒计时里拿出来，放回生活里慢慢看。","marry_chance"]],
+["40岁","中年危机","行业变化，公司裁员。你开始认真阅读体检报告。",["继续卷头部岗位","只要还能卷，就还没输。",["焦虑",120,"内耗",90,"社会",90,"幸福",-28],"你成了部门定海神针，代价是每次开会都像渡劫。","roll"],["转向稳定生活","把生活从 KPI 里赎回来。",["后悔",70,"社会",-20,"幸福",35],"你失去了一些头衔，找回了几顿按时吃的晚饭。","life"],["创业重新开始","中年也可以重启。",["焦虑",140,"后悔",90,"社会",70,"幸福",-30],"你重新拥有了年轻人的激情，以及年轻人同款现金流危机。","restart"]],
+["50岁","财富选择","你获得一笔资金。命运递来一张看似温柔的试卷。",["投资初代同事项目","你们曾是初代同事，他一直很稳定，后来发展不错，家庭也经营得体面，看起来很值得信任。",["焦虑",70,"后悔",120,"社会",30,"幸福",-35],"朋友还在，钱的形态发生了哲学变化。","friend"],["配置不动产稳定资产","你看了很多楼盘、地段和配套，也咨询了几位做资产配置的朋友，觉得这笔钱应该放得稳一点。",["后悔",45,"社会",45,"幸福",25],"你没有暴富故事，但开始对账单露出成熟微笑。","asset"],["出国旅行提升生活质量","你看了很多路线，有欧洲、东南亚、日韩，也想趁身体和心气都还在，给自己一段真正离开的时间。",["后悔",55,"社会",-5,"幸福",45],"你买下的不是消费，是一些终于不用证明自己的下午。","quality"]],
+["70岁","人生回顾","系统开始结算。请注意：结果不构成人生建议，只构成一次荒诞围观。",["生成结局","看看这一生被命名为什么。",["焦虑",0],"","end"],["再想想","人生没有撤回键，但页面有。",["内耗",20],"你认真思考了一下，系统认为这也算一种选择。","pause"],["假装淡定","以体面姿态进入结算。",["社会",10,"内耗",10],"你点得很从容，像从来没有在深夜搜索过“普通人怎么办”。","end"]]
+];
+const publicMidlife=["40岁","中年关口","基层多年，晋升名额、借调机会和家庭责任同时出现。你开始认真阅读体检报告。",["争取关键岗位","再往前一步，也许就是新空间。",["焦虑",95,"内耗",85,"社会",80,"幸福",-18],"你学会了在材料、协调和临时任务之间保持微笑。大家说你成熟了，你知道那叫被磨圆。","public_up"],["回到稳定节奏","把生活从待办清单里赎回来。",["后悔",65,"社会",-10,"幸福",32],"你没有成为传说中的年轻干部，但终于能按时吃几顿晚饭。","life"],["离开体系重启","把安全感换成可能性。",["焦虑",130,"后悔",95,"社会",55,"幸福",-26],"你第一次发现，体制外也有流程，只是没人给你发模板。","restart"]];
+const stableMidlife=["40岁","稳定的代价","组织调整、岗位轮换和职级天花板同时出现。你发现稳定不是没有波动，而是波动会换一种说法。",["争取晋升机会","把资历变成位置。",["焦虑",85,"内耗",70,"社会",75,"幸福",-12],"你获得了更多会议席位，也获得了更多不能说太满的话。","stable_up"],["接受平稳生活","不再把每次排序当审判。",["后悔",60,"社会",-5,"幸福",34],"你错过了一些热闹，但拥有了几段不用汇报的傍晚。","life"],["跳出去看看","稳定久了，也会想试试风。",["焦虑",120,"后悔",90,"社会",45,"幸福",-22],"你把铁饭碗放在桌上研究，发现它并不负责解释外面的菜单。","restart"]];
+const hiddenMidlife=["40岁","保底路径复利","当年那次没转正、没上岸、没进去的分流，已经长成一棵很会开会的树。你开始认真阅读体检报告。",["继续在普通岗位滚动","先活着，等下一次窗口。",["焦虑",105,"后悔",80,"内耗",85,"社会",35,"幸福",-20],"你没有输给某个选择，你输给了很多个“先这样吧”的复利。","roll"],["承认保底也是人生","把临时方案过成正式版本。",["后悔",70,"社会",-15,"幸福",30],"你终于发现，隐藏保底没有消失，只是改名叫生活。","life"],["再次报名重启","把旧遗憾重新包装成新计划。",["焦虑",135,"后悔",95,"社会",45,"幸福",-28],"你又打开报名表，系统提示：人生 CD 尚未冷却，但可以强行进入。","restart"]];
+const farewellEvents=[
+["亲人突然离开","某个普通的日子，电话响起。你赶过去的时候，很多话已经来不及说。人生突然空出一块，没人告诉你该怎么补。",["焦虑",80,"后悔",120,"内耗",90,"幸福",-35],"family_loss"],
+["宠物突然离开","它曾经把每天都过得很简单：等你回家，蹭你的手，在你难过时安静陪着你。然后某一天，它先走了。",["焦虑",45,"后悔",90,"内耗",80,"幸福",-25],"pet_loss"],
+["朋友因误会分道扬镳","你们曾经什么都聊，后来因为一句话、一次沉默、一个没解释清楚的误会，慢慢站到了不同的岸边。",["焦虑",40,"后悔",95,"内耗",110,"社会",-20,"幸福",-20],"friend_loss"],
+["群聊某天不再说话","那个每天都有消息的群，突然安静下来。没有争吵，没有告别，只是大家各自被生活冲散。",["焦虑",30,"后悔",60,"内耗",70,"社会",-15,"幸福",-15],"group_silent"]
+];
+const luckyEvents=[
+["多出来的一块麦乐鸡","你只是去吃一顿麦当劳，打开盒子时发现店员多给了一块麦乐鸡。那一刻，世界没有变好，但它偷偷向你眨了一下眼。",["焦虑",-25,"后悔",-20,"内耗",-30,"幸福",35],"extra_nugget"],
+["刮彩票中了四十块","你路过彩票站，随手刮了一张。中了四十块，不够改变命运，但足够买一杯饮料和一点今天还不错的错觉。",["焦虑",-20,"后悔",-15,"内耗",-25,"幸福",30],"lottery_40"],
+["去街边卖红薯","某天你突然想去街边卖红薯，于是就去了。没有 KPI，没有复盘，没有意义汇报，只有热气、路人和一种不解释的快乐。",["焦虑",-35,"后悔",-25,"内耗",-40,"幸福",45],"sweet_potato"],
+["去地里拔萝卜","你突然想去地里拔萝卜，于是真的去了。泥土很实在，萝卜也很实在，你短暂从抽象人生里回到了具体世界。",["焦虑",-35,"后悔",-20,"内耗",-45,"幸福",45],"pull_radish"],
+["出差时关掉手机","出差路上，你关掉手机，让几个小时只属于自己。没人知道你在哪里，时间第一次没有被会议和消息切碎。",["焦虑",-45,"后悔",-15,"内耗",-35,"幸福",50],"phone_off"]
+];
+const firstRolls=[
+[["头部互联网落地","50% 概率通过：实习转正、秋招开奖、HC 还活着。你进入头部互联网，开始学习把不确定性叫作组织调整。",["焦虑",80,"社会",90,"内耗",35,"幸福",-10],"bigtech"],["行业独角兽实习未转正","隐藏保底触发：独角兽说你很优秀，但今年转正名额被现实吃掉了。你带着大厂工牌照片和春招焦虑进入下一局。",["焦虑",110,"后悔",70,"内耗",65,"社会",25,"幸福",-22],"unicorn"],["中小企业极速入职","隐藏保底触发：你错过头部厂，进入一家老板每天说要对标大厂的公司。制度没有对标，消息已读倒是对标了。",["焦虑",85,"后悔",60,"内耗",55,"社会",15,"幸福",-8],"sme"],["回家空窗准备春招","隐藏保底触发：海量投递变成海量已读不回。你回家准备春招，亲戚开始用关心的语气做压力测试。",["焦虑",105,"后悔",80,"内耗",85,"社会",-20,"幸福",-15],"home"]],
+[["央国企入场成功","50% 概率通过：资源、饭局、叔叔阿姨和你的简历共同完成了一次合规但不轻盈的降落。",["后悔",55,"社会",65,"内耗",35,"幸福",4],"stable"],["人情局排队失败","隐藏保底触发：钱送出去了，笑也笑完了，名额说没就没。你第一次理解成年人为什么在饭桌上沉默。",["焦虑",80,"后悔",105,"内耗",95,"社会",-15,"幸福",-25],"relation_fail"],["普通公司临时上岸","隐藏保底触发：稳定没进去，先去一家普通公司。家里说先干着，你知道这三个字能覆盖很多裂缝。",["焦虑",75,"后悔",70,"内耗",55,"社会",5,"幸福",-5],"ordinary"],["外包岗获得体面包装","隐藏保底触发：岗位名称很稳定，合同主体很灵活。你拥有了体制边缘的门禁卡和不太边缘的焦虑。",["焦虑",90,"后悔",75,"内耗",70,"社会",20,"幸福",-12],"outsourcing"]],
+[["选调上岸","50% 概率通过：笔试、面试、体检、政审全部穿过。你抵达基层，发现未来空间和即时任务经常共用一个文件夹。",["焦虑",45,"后悔",45,"社会",55,"幸福",4],"public"],["选调失利二战犹豫","隐藏保底触发：差一点上岸，最擅长折磨人。你开始在二战、春招、考公群和家庭群之间反复横跳。",["焦虑",100,"后悔",110,"内耗",95,"社会",-10,"幸福",-24],"exam_fail"],["回家备考成为家庭项目","隐藏保底触发：你没考上，但全家进入备考模式。你的作息表被贴在冰箱上，像一张未上市公司的路线图。",["焦虑",90,"后悔",85,"内耗",100,"社会",-20,"幸福",-18],"home"],["普通岗位先活下来","隐藏保底触发：选调没上岸，你先找了份普通工作。系统提示：这不是失败，这是人生自动保存。",["焦虑",70,"后悔",75,"内耗",60,"社会",0,"幸福",0],"ordinary"]]
+];
+const laterRolls={
+1:[
+[["跟前辈做出小风口","50% 概率通过：前辈的人脉、经验和你的执行力短暂对齐，现金流终于像个人。",["焦虑",110,"后悔",70,"社会",80,"幸福",-25],"startup"],["前辈的船也会漏水","50% 概率翻车：你学到很多经验，也一起承担了房租、社保和现金流缺口。",["焦虑",150,"后悔",120,"内耗",80,"社会",20,"幸福",-45],"startup_fail"]],
+[["转型成功入场","50% 概率通过：新技能刚好赶上招聘口径，你被时代临时捞了一把。",["焦虑",70,"内耗",55,"社会",45,"幸福",2],"skill"],["转型徒劳并稀释原职能","50% 概率翻车：新方向没站稳，原本的专业也被搁置太久，你像一份被多次改名的文件。",["焦虑",110,"后悔",85,"内耗",100,"社会",5,"幸福",-22],"skill_fail"]],
+[["职业垂直一路上升","50% 概率通过：你在一个方向上越扎越深，终于有人愿意为你的判断付费。",["后悔",50,"内耗",35,"社会",55,"幸福",18],"slow"],["行业变动砍掉整条职能","50% 概率翻车：你深耕的井还在，行业把井口搬走了。",["焦虑",125,"后悔",90,"内耗",85,"社会",-5,"幸福",-25],"main_fail"]]],
+2:[
+[["政策核心区兑现了一部分","50% 概率通过：产业确实来了，地铁也修了几站。房子没有起飞，但在家庭群里很有说服力。",["焦虑",130,"后悔",65,"社会",95,"幸福",-35],"house"],["经济圈停在规划文本里","50% 概率翻车：扶持是真的，兑现很慢；月供按时，产业导入正在路上。你成了政策红利的长期观察员。",["焦虑",180,"后悔",120,"内耗",95,"社会",40,"幸福",-60],"house_fail"]],
+[["远郊舒适房治愈了你","50% 概率通过：客厅很大，阳光很好，你终于拥有一个不用折叠餐桌的周末。",["焦虑",80,"后悔",70,"社会",45,"幸福",15],"commute"],["通勤吞掉了你的精神血条","50% 概率翻车：每天往返三小时，房子很舒心，人不太完整。你开始在地铁上练习灵魂离线。",["焦虑",140,"后悔",105,"内耗",125,"社会",15,"幸福",-35],"commute_fail"]],
+[["租房保住现金流","50% 概率通过：你没有资产神话，但拥有随时跑路的能力。",["后悔",75,"内耗",65,"社会",-10,"幸福",18],"rent"],["房东通知你下月搬走","50% 概率翻车：自由是真的，押金和搬家费也是真的。",["焦虑",75,"后悔",70,"内耗",90,"社会",-15,"幸福",-10],"rent_fail"]]],
+3:[
+[["嫁/入高门并成为全职宝爸/宝妈","8% 概率触发：对方家庭资源很强，你进入一份没有工资条但全天候在线的家庭岗位。",["焦虑",70,"后悔",80,"内耗",110,"社会",160,"幸福",10],"fulltime_rich",8],["恋人出轨","5% 概率触发：你以为是在磨合生活，对方已经在开第二条故事线。",["焦虑",115,"后悔",130,"内耗",135,"社会",0,"幸福",-55],"partner_cheat",5],["白头偕老平安一生","55% 概率触发：你们没有神话，也没有爆雷，只是把饭吃热，把日子过长。",["焦虑",35,"后悔",35,"内耗",35,"社会",45,"幸福",70],"marry_peace",55],["你自己出轨","3% 概率触发：你亲手把稳定生活拆成两份解释成本。",["焦虑",120,"后悔",140,"内耗",120,"社会",-20,"幸福",-45],"self_cheat",3],["孩子不省心","12% 概率触发：你以为养育是长期投资，后来发现它更像无限售后。",["焦虑",130,"后悔",80,"内耗",115,"社会",10,"幸福",-25],"kid_trouble",12],["孩子很有出息","17% 概率触发：孩子突然争气，亲戚群把你的教育方式追认为先进经验。",["焦虑",45,"后悔",45,"内耗",50,"社会",120,"幸福",35],"kid_success",17]],
+[["遇到好人白头偕老","50% 概率触发：你没有刻意追逐婚姻，但生活把一个合适的人慢慢推到身边。",["焦虑",35,"后悔",35,"内耗",35,"社会",40,"幸福",65],"marry_peace",50],["潇洒自由","25% 概率触发：你一个人把生活安排得很好，周末、旅行和冰箱都听你指挥。",["焦虑",30,"后悔",55,"内耗",45,"社会",-20,"幸福",55],"free_single",25],["孤独终老","25% 概率触发：你保住了自由，也在某些夜晚发现自由没有回声。",["焦虑",80,"后悔",110,"内耗",120,"社会",-35,"幸福",-20],"lonely_single",25]],
+[["嫁/入高门并成为全职宝爸/宝妈","8% 概率触发：你随缘遇见了高资源家庭，生活忽然切到豪华但高规训模式。",["焦虑",70,"后悔",80,"内耗",110,"社会",160,"幸福",10],"fulltime_rich",8],["恋人出轨","5% 概率触发：顺其自然的关系，顺到后来多了一个你不知道的人。",["焦虑",115,"后悔",130,"内耗",135,"社会",0,"幸福",-55],"partner_cheat",5],["白头偕老平安一生","55% 概率触发：你们没有刻意追赶进度，却把日子过得很稳。",["焦虑",35,"后悔",35,"内耗",35,"社会",45,"幸福",70],"marry_peace",55],["你自己出轨","3% 概率触发：你把随缘误读成随便，后来每个节日都像审计日。",["焦虑",120,"后悔",140,"内耗",120,"社会",-20,"幸福",-45],"self_cheat",3],["孩子不省心","12% 概率触发：孩子很有主见，主见主要用于反对你。",["焦虑",130,"后悔",80,"内耗",115,"社会",10,"幸福",-25],"kid_trouble",12],["孩子很有出息","17% 概率触发：孩子把你没完成的社会评价 KPI 超额完成。",["焦虑",45,"后悔",45,"内耗",50,"社会",120,"幸福",35],"kid_success",17]]],
+4:[
+[["卷进头部岗位","50% 概率通过：你成了部门定海神针，代价是每次开会都像渡劫。",["焦虑",120,"内耗",90,"社会",90,"幸福",-28],"roll"],["头部岗位先卷掉你","50% 概率翻车：你还在卷，组织架构先替你做了断舍离。",["焦虑",160,"后悔",95,"内耗",120,"社会",15,"幸福",-45],"layoff_fail"]],
+[["生活节奏降下来","50% 概率通过：你失去一些头衔，找回几顿按时吃的晚饭。",["后悔",70,"社会",-20,"幸福",35],"life"],["稳定生活被账单追上","50% 概率翻车：你想慢下来，但房贷、老人、孩子和体检报告不同意。",["焦虑",115,"后悔",90,"内耗",85,"社会",-10,"幸福",-25],"life_fail"]],
+[["中年创业找到缝隙","50% 概率通过：你重新拥有年轻人的激情，以及中年人的 Excel。",["焦虑",140,"后悔",90,"社会",70,"幸福",-30],"restart"],["中年创业成为现金流祭品","50% 概率翻车：你不是重新开始，你是用积蓄给市场做了一次情绪供养。",["焦虑",175,"后悔",145,"内耗",100,"社会",20,"幸福",-55],"restart_fail"]]],
+5:[
+[["初代同事没有变坏","50% 概率通过：项目真的活了下来，你们在庆功宴上假装从未怀疑过彼此。",["焦虑",70,"后悔",80,"社会",55,"幸福",5],"friend"],["初代同事把你当初代韭菜","50% 概率翻车：他曾经很稳定，后来稳定地骗了你。聊天记录成为你最贵的纪念品。",["焦虑",120,"后悔",180,"内耗",100,"社会",-20,"幸福",-65],"friend_scam"]],
+[["不动产稳定落袋","50% 概率通过：开发商还在，房本也在。你第一次觉得普通合同像护身符。",["后悔",45,"社会",45,"幸福",25],"asset"],["开发商跑路成稳定资产","50% 概率翻车：稳定的是停工，确定的是维权群，增值的是你对烂尾楼词汇的掌握。",["焦虑",130,"后悔",160,"内耗",95,"社会",-10,"幸福",-55],"asset_fail"]],
+[["欧洲旅行触发盗窃副本","25% 概率触发：钱包、护照、手机分头行动。你在警局完成了一次深度文化交流。",["焦虑",115,"后悔",120,"内耗",80,"社会",10,"幸福",-35],"travel_fail",25],["东南亚旅行遇到骗局","25% 概率触发：你本来想放松身心，最后研究了三天跨境投诉流程。",["焦虑",105,"后悔",110,"内耗",85,"社会",0,"幸福",-30],"travel_scam",25],["日韩旅行过得很开心","25% 概率触发：城市干净、饭很好吃、路线顺利，你久违地觉得生活不只是待办事项。",["后悔",35,"社会",5,"幸福",55],"quality",25],["旅行确实有益身心","25% 概率触发：你离开熟悉环境一段时间，回来后发现自己还能重新呼吸。",["焦虑",-20,"后悔",35,"内耗",-25,"社会",-5,"幸福",60],"travel_heal",25]]]
+};
+const publicMidlifeRolls=[
+[["关键岗位争取成功","50% 概率通过：你进入更核心的位置，也进入更核心的材料流转。",["焦虑",95,"内耗",85,"社会",80,"幸福",-18],"public_up"],["关键岗位擦肩而过","50% 概率翻车：名额去了更合适的人。你开始研究“更合适”三个字的民俗学含义。",["焦虑",120,"后悔",95,"内耗",110,"社会",20,"幸福",-30],"public_fail"]],
+[["稳定节奏找回来","50% 概率通过：你没有成为传说中的年轻干部，但终于能按时吃几顿晚饭。",["后悔",65,"社会",-10,"幸福",32],"life"],["稳定节奏被临时任务截胡","50% 概率翻车：你刚想下班，通知来了。生活从不拒绝你，只是经常改期。",["焦虑",95,"后悔",80,"内耗",85,"社会",5,"幸福",-20],"public_life_fail"]],
+[["离开体系重启成功","50% 概率通过：你第一次发现，体制外也有流程，只是没人给你发模板。",["焦虑",130,"后悔",95,"社会",55,"幸福",-26],"restart"],["离开体系后想念模板","50% 概率翻车：你离开了熟悉的规则，进入了没有规则但也要交付的地方。",["焦虑",150,"后悔",130,"内耗",100,"社会",10,"幸福",-40],"restart_fail"]]];
+const stableMidlifeRolls=[
+[["晋升机会落地","50% 概率通过：你获得更多会议席位，也获得更多不能说太满的话。",["焦虑",85,"内耗",70,"社会",75,"幸福",-12],"stable_up"],["晋升机会被组织优化","50% 概率翻车：你准备好了，位置没准备好。领导说未来还有机会，未来没有回复。",["焦虑",105,"后悔",90,"内耗",95,"社会",15,"幸福",-25],"stable_fail"]],
+[["平稳生活成立","50% 概率通过：你错过了一些热闹，但拥有几段不用汇报的傍晚。",["后悔",60,"社会",-5,"幸福",34],"life"],["平稳生活被人情消耗","50% 概率翻车：你不想争，但饭局、排序和面子没有同意。",["焦虑",85,"后悔",75,"内耗",90,"社会",10,"幸福",-18],"stable_life_fail"]],
+[["跳出去看到新风景","50% 概率通过：你把铁饭碗放在桌上研究，发现外面的菜单也能点。",["焦虑",120,"后悔",90,"社会",45,"幸福",-22],"restart"],["跳出去后发现没有餐具","50% 概率翻车：稳定没了，不确定性很热情地给你安排了前排座。",["焦虑",150,"后悔",130,"内耗",95,"社会",5,"幸福",-42],"restart_fail"]]];
+const hiddenMidlifeRolls=[
+[["普通岗位滚动成功","50% 概率通过：你没有赢，但也没有掉线。系统把这叫韧性，你把这叫先别死。",["焦虑",105,"后悔",80,"内耗",85,"社会",35,"幸福",-20],"roll"],["普通岗位继续塌方","50% 概率翻车：你以为这是保底，后来发现保底也会下修。",["焦虑",145,"后悔",115,"内耗",120,"社会",0,"幸福",-38],"hidden_fail"]],
+[["承认保底也是人生","50% 概率通过：隐藏保底没有消失，只是改名叫生活。",["后悔",70,"社会",-15,"幸福",30],"life"],["保底人生被比较击穿","50% 概率翻车：你接受了自己，但朋友圈没有配合。",["焦虑",95,"后悔",90,"内耗",115,"社会",-10,"幸福",-22],"hidden_life_fail"]],
+[["再次报名重启","50% 概率通过：人生 CD 尚未冷却，但你强行进入。",["焦虑",135,"后悔",95,"社会",45,"幸福",-28],"restart"],["重启按钮变成付费功能","50% 概率翻车：你准备重新开始，现实提示请先结清历史账单。",["焦虑",160,"后悔",140,"内耗",110,"社会",0,"幸福",-45],"restart_fail"]]];
+const rollTables={0:firstRolls,...laterRolls};
+function rollTableNow(n){return i===4&&n===publicMidlife?publicMidlifeRolls:i===4&&n===stableMidlife?stableMidlifeRolls:i===4&&n===hiddenMidlife?hiddenMidlifeRolls:rollTables[i]}
+const rumors={0:[["学长内推：今年最后一批 HC","群里说：现在不冲头部厂，以后简历就没有第一学历之外的故事。"],["家里饭局：某叔叔说可以问问","长辈说：先把关系走起来，年轻人别太清高。"]],1:[["行业闭门会：领军人物正在组局","有人说：这个方向已经有资金、资源和第一批客户，只差敢下场的人。"],["融资圈传闻：新消费又要回来了","群友说：周期到底了，敢抄底的人才有未来。"]],2:[["政策窗口：经济圈核心区要起飞","中介压低声音说：这次是中央口径，产业、学校、地铁都会跟上。现在不加杠杆，三年后你只能给别人接盘。"],["内部图纸：核心区土地会越来越少","朋友转来一张模糊规划图：核心区名额有限，首付不够就想办法凑，普通人翻身就靠这一轮。"]],3:[["相亲局情报：资源比爱情靠谱","朋友说：爱情会变，家庭条件不会。"],["育儿窗口提醒：再晚就来不及了","亲戚说：事业可以慢慢来，家庭窗口错过就没了。"]],4:[["组织消息：下一轮调整很快来","同事说：现在不主动变化，就会被变化主动处理。"],["熟人提醒：稳定岗位也要重新洗牌","饭局上有人说：别以为安全，真正的排序刚开始。"]],5:[["老同事私聊：这项目只带自己人","他说：我们认识这么多年，我什么人你清楚。"],["资产顾问：现在适合防守配置","顾问说：别再冒险，买点稳的，抗周期。"],["旅行博主：人生一定要奖励自己一次出国旅行","博主说：钱会再赚，体验不会等你。"]]};
+const endings=[
+["离别练习生","这一生你反复练习同一件事：有人先走，关系散场，热闹沉下去。系统评价：你没有学会放下，只是学会了继续吃饭。",s=>s.tags.filter(x=>["family_loss","pet_loss","friend_loss","group_silent"].includes(x)).length>=2&&s.reg>600],
+["麦乐鸡宇宙眷顾者","你没有赢下时代，但生活偶尔多给你一块麦乐鸡、四十块彩票钱、一根萝卜和一段无人打扰的时间。系统评价：小幸运也是资产。",s=>s.tags.filter(x=>["extra_nugget","lottery_40","sweet_potato","pull_radish","phone_off"].includes(x)).length>=2&&s.hap>60],
+["全职宝爸/宝妈嫁豪门","你成功进入高资源婚姻，并获得一份没有工资条、没有下班时间、但外界都说你赚到了的岗位。系统评价：阶层跃迁成功，劳动合同消失。",s=>s.tags.includes("fulltime_rich")],
+["绿帽供应链受害者","你以为关系进入稳定交付期，对方悄悄开了灰度测试。系统评价：信任破产，但聊天记录很完整。",s=>s.tags.includes("partner_cheat")],
+["自毁型浪漫主义者","你亲手把平稳生活拆成几份解释成本。后来你明白，刺激不是自由，是另一种长期账单。",s=>s.tags.includes("self_cheat")],
+["鸡娃售后无限公司","孩子很有主见，主要用于反对你。你的晚年关键词从财富自由变成作业、叛逆和已读不回。",s=>s.tags.includes("kid_trouble")],
+["祖坟冒烟项目经理","孩子突然有出息，亲戚群把你追认为教育专家。你没有掌握方法论，但掌握了沉默微笑。",s=>s.tags.includes("kid_success")],
+["潇洒自由样本库","你没有进入婚姻系统，也没有被系统彻底惩罚。一个人的日子被你过成了低噪音人生。",s=>s.tags.includes("free_single")],
+["孤独终老观察员","你保住了自由，也保住了很多无人分享的黄昏。系统评价：安静是真的，回声也是真的。",s=>s.tags.includes("lonely_single")],
+["白头偕老低调奇迹","你们没有成为传奇，只是把热饭、体检、争吵和原谅重复了很多年。系统判定：稳定到可疑。",s=>s.tags.includes("marry_peace")],
+["初代韭菜纪念馆馆长","你曾相信初代同事、稳定人格和熟人信用。后来你发现，商业世界最昂贵的资产不是项目，是聊天记录里的“放心”。",s=>s.tags.includes("friend_scam")],
+["烂尾楼词汇学博士","你配置了不动产稳定资产，最后稳定获得停工通知、维权群公告和开发商失联文学。房子没封顶，你的黑色幽默封顶了。",s=>s.tags.includes("asset_fail")],
+["欧洲警局深度游用户","你本想提升生活质量，结果钱包、护照、手机共同选择自由行。旅行社没安排的项目，命运替你补齐了。",s=>s.tags.includes("travel_fail")],
+["东南亚反诈亲历者","你本想去放松，最后熟练掌握跨境投诉、翻译软件和不要相信热情陌生人的人生常识。",s=>s.tags.includes("travel_scam")],
+["通勤精神折旧师","你买到了阳光、客厅和独立书房，也买到了每天三小时的灵魂托运服务。房子在升值，你的精神电量在做等额本息。",s=>s.tags.includes("commute_fail")],
+["风口耗材登记员","你不是没努力，你只是被风口短暂使用后放回人群。系统评价：可回收，但不可退款。",s=>s.tags.some(x=>["startup_fail","main_fail","career_fail","restart_fail"].includes(x))],
+["隐藏保底CD冷却中","你以为自己在做选择，其实系统一直在后台生成保底方案。每次失败都没有爆炸，只是悄悄把你传送到一个更会内耗的地图。",s=>s.tags.some(x=>["unicorn","sme","home","ordinary","outsourcing"].includes(x))],
+["叔叔阿姨人情债审计报告","你叫过很多叔叔阿姨好，也见过父母把体面折成红包递出去。最终系统判定：稳定不是免费的，只是账单不一定写你的名字。",s=>s.tags.includes("relation_fail")||s.tags.includes("outsourcing")],
+["差一点上岸幽灵","你没有失败得很彻底，你只是差一点成功。于是这三个字在之后几十年里反复返场，像一位不请自来的职业规划师。",s=>s.tags.includes("exam_fail")],
+["低风险人生异常样本","系统扫描你的一生：没有暴富，没有爆雷，没有被写进商业案例。平台判定你过于可疑，建议补交三份痛苦证明。荒诞指数：998。",s=>s.max<720&&s.soc<520],
+["周末保卫战最高指挥官","你用 70 年从时代手里抢回若干个完整周末。史书没有记载你，但外卖软件记得你的清淡口味。",s=>s.anx<520&&s.hap>20],
+["风口遗址考古队队长","你追过 AI、直播、新能源、区块链。多年后，你的行业群截图被博物馆收藏，展品名叫《差一点就自由的人类》。",s=>s.tags.filter(x=>["startup","skill","media","restart"].includes(x)).length>=3],
+["概率女神临时工","你没有特别努力，但几次选择刚好踩中机会。系统拒绝承认这是能力，于是把你的档案塞进“玄学样本”文件夹。",s=>s.hap>55&&s.reg<420],
+["稳定焦虑永动机","你拥有稳定工作、稳定收入、稳定生活。唯一不稳定的是每天怀疑自己是不是被时代静音播放了。",s=>s.tags.includes("stable")&&s.anx>430],
+["朋友圈赛博富豪","所有人觉得你成功：创业、旅游、豪车、投资。真实情况：你把人生最好三个月做成素材库，循环投放了十年。",s=>s.soc>520&&s.hap<25],
+["反上进心罪嫌疑人","你终于不想改变世界了。系统尚未判罚，亲友团已提交弹劾：此人竟敢在工作日傍晚散步。",s=>s.hap>45&&s.soc<360],
+["房贷宇航员","你不是买了房，你是报名参加 30 年低轨道还款任务。每月扣款日，地球引力都会准时提醒你保持谦逊。",s=>s.tags.includes("house")&&s.anx>500],
+["知识付费培养皿","你学会了很多退款规则，也学会把焦虑命名为成长。最终你成为课程生态的一部分，负责用沉默证明转化率。",s=>s.tags.includes("skill")&&s.inn>430],
+["人生启动页常驻嘉宾","你不断重新开始，终于把人生练成了启动页。按钮永远写着“立即体验”，加载条永远停在 99%。",s=>s.tags.includes("restart")||s.tags.includes("startup")],
+["晚饭地下组织成员","你没赢下时代，但秘密赢回几顿热饭。组织代号：六点半到家；接头暗号：今天不加班。",s=>s.tags.includes("life")||s.tags.includes("quality")],
+["内耗炼金术士","你把比较、怀疑和自我否定反复提纯，最终炼出一块纯度 99.9% 的精神铅块。专家建议：继续乐观。",s=>s.inn>520],
+["社会评价代餐冠军","别人眼中的你营养均衡、包装精美、适合转发。实际入口后略苦，主要成分是硬撑、截图和礼貌微笑。",s=>s.soc>520]
+];
+let i=0,stats={焦虑:0,后悔:0,内耗:0,社会:0,幸福:0},tags=[],picked=[],shown=[],result=null,rumorAt=[],eventQueue={},pendingEvent=null;
+function shuffle(a){for(let j=a.length-1;j>0;j--){let k=Math.floor(Math.random()*(j+1));[a[j],a[k]]=[a[k],a[j]]}return a}
+function addEvent(at,kind,event){(eventQueue[at]||(eventQueue[at]=[])).push({kind,event})}
+function init(){let keys=Object.keys(rumors).map(Number),count=1+Math.floor(Math.random()*2);while(rumorAt.length<count){let n=keys[Math.floor(Math.random()*keys.length)];if(!rumorAt.includes(n))rumorAt.push(n)}let slots=shuffle(Array.from({length:nodes.length-2},(_,n)=>n+1)),fcount=1+Math.floor(Math.random()*3),lcount=Math.floor(Math.random()*3);shuffle([...farewellEvents]).slice(0,fcount).forEach(e=>addEvent(slots.pop(),"farewell",e));shuffle([...luckyEvents]).slice(0,lcount).forEach(e=>addEvent(slots.pop(),"lucky",e));render()}
+function clamp(v){return Math.max(0,Math.min(999,v))}
+function nodeNow(){let h=tags.some(x=>["unicorn","sme","home","ordinary","outsourcing","relation_fail","exam_fail","startup_fail","skill_fail","main_fail"].includes(x));return i===4&&tags.includes("public")?publicMidlife:i===4&&tags.includes("stable")?stableMidlife:i===4&&h?hiddenMidlife:nodes[i]}
+function meters(){document.getElementById("line").innerHTML=nodes.map((x,n)=>`<i class="dot ${n<=i?"on":""}" data-step="${n+1}">${x[0]}</i>`).join("");document.getElementById("meters").innerHTML=["焦虑","后悔","内耗","社会"].map(k=>`<div class="bar"><span><em>${k}值</em><b>${stats[k]}</b></span><div class="track"><div class="fill" style="width:${stats[k]/9.99}%"></div></div></div>`).join("")}
+function render(){meters();let n=nodeNow(),pool=rumors[i]||[],r=rumorAt.includes(i)&&!shown.includes(i)?pool[Math.floor(Math.random()*pool.length)]:null;if(r)shown.push(i);document.getElementById("app").innerHTML=`<div class="card"><div class="top"><div><div class="age">${n[0]} / 节点 ${i+1} of ${nodes.length}</div><h2>${n[1]}</h2><p class="context">${n[2]}</p></div></div>${r?`<div class="rumor"><strong>小道消息卡｜${r[0]}</strong>${r[1]}</div>`:""}${result?"":`<div class="choices">${n.slice(3).map((c,idx)=>`<button class="choice" onclick="choose(${idx})"><b>${String.fromCharCode(65+idx)}. ${c[0]}</b><small>${c[1]}</small><span class="tag">表面收益可见，隐藏风险不可见</span></button>`).join("")}</div>`}${result?`<div class="result">${result}</div><button class="next" onclick="next()">${i===nodes.length-1?"查看人生报告":"进入下一节点"}</button>`:""}</div>`}
+function renderEvent(){meters();let p=pendingEvent,e=p.event,good=p.kind==="lucky";document.getElementById("app").innerHTML=`<div class="card"><div class="age">突发事件 / ${good?"幸运小事":"分离与离别"}</div><h2>${e[0]}</h2><p class="context">${e[1]}</p><div class="result">${good?"这一格没有宏大意义，只是生活突然给你递来一点糖。":"这一格没有选项。你无能为力，只能接受。"}</div><button class="next" onclick="acceptEvent()">${good?"收下这一点幸运":"接受这一格"}</button></div>`}
+function add(d){for(let j=0;j<d.length;j+=2)stats[d[j]]=clamp((stats[d[j]]||0)+d[j+1])}
+function roll(pool){if(pool.some(x=>typeof x[4]==="number")){let total=pool.reduce((a,x)=>a+(x[4]||0),0),r=Math.random()*total;for(let o of pool){r-=o[4]||0;if(r<=0)return o}return pool[pool.length-1]}return Math.random()<.5?pool[0]:pool[1+Math.floor(Math.random()*(pool.length-1))]}
+function choose(idx){let n=nodeNow(),c=n[idx+3],table=rollTableNow(n);if(table){let o=roll(table[idx]);add(o[2]);tags.push(o[3]);picked.push(c[0]+" -> "+o[0]);result=o[1];render();return}add(c[2]);tags.push(c[4]);picked.push(c[0]);result=c[3]||"系统正在把你的选择包装成命运。";if(c[4]==="end")finish();else render()}
+function acceptEvent(){let p=pendingEvent,e=p.event;add(e[2]);tags.push(e[3]);picked.push((p.kind==="lucky"?"幸运小事":"面对分离与离别")+" -> "+e[0]);pendingEvent=null;result=null;if(eventQueue[i]?.length){pendingEvent=eventQueue[i].shift();renderEvent();return}render()}
+function next(){if(i>=nodes.length-1)return finish();i++;result=null;if(eventQueue[i]?.length){pendingEvent=eventQueue[i].shift();renderEvent();return}render()}
+function score(){return{anx:stats.焦虑,reg:stats.后悔,inn:stats.内耗,soc:stats.社会,hap:stats.幸福,tags,max:Math.max(stats.焦虑,stats.后悔,stats.内耗,stats.社会)}}
+function finish(){meters();let s=score(),e=endings.find(x=>x[2](s))||endings[0];document.getElementById("app").innerHTML=`<div class="card ending"><div class="age">70岁 / 人生报告</div><h2>《${e[0]}》</h2><p class="context">${e[1]}</p><div class="stats">${["焦虑","后悔","内耗","社会","幸福"].map(k=>`<div class="stat"><span>${k}${k==="幸福"?"值":"值"}</span><b>${stats[k]}</b></div>`).join("")}</div><div class="quote">“所谓正确答案，只存在于结果揭晓之后。”</div><div class="report"><h3>可截图人生报告</h3><p>人生称号：${e[0]}<br>核心路径：${picked.slice(0,nodes.length-1).join(" / ")}<br>一句话总结：你没有证明人生可控，只证明了命运很会写黑色幽默。<br><br>这一辈子你过得并不平凡，但我希望你的一辈子，过得平凡顺利。</p></div><button class="restart" onclick="location.reload()">重开一生</button></div>`}
+init();
+</script>
+</body>
+</html>
